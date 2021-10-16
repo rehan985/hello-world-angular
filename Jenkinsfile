@@ -9,10 +9,14 @@ pipeline {
 
     stage('push image') {
       steps {
-        sh '''docker login -u ${myusername} -p ${mypassword}
+        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'mypassword', usernameVariable: 'myusername')]) {
+    // some block
+          sh '''docker login -u ${myusername} -p ${mypassword}
 docker image push coolgourav147/angularproject:${BUILD_ID}
 docker logout
 docker image rm coolgourav147/angularproject:${BUILD_ID}'''
+        }
+        
       }
     }
 
